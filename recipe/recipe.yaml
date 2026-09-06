@@ -1,0 +1,50 @@
+schema_version: 1
+
+context:
+  name: dtool_ecs
+  version: "0.5.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/dtool_ecs/dtool-ecs-${{ version }}.tar.gz
+  sha256: bae76be9b443f5580877215a6a2b8d97c18cce995b037c5023bc2bf32574b2d1
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools
+  run:
+    - boto3
+    - click
+    - dtool_cli
+    - dtool_s3 >=0.7.0
+    - dtoolcore >=3.10
+    - python >=${{ python_min }}
+
+tests:
+  - python:
+      imports:
+        - dtool_ecs
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+
+about:
+  summary: Add ECS S3 support to dtool
+  license: MIT
+  license_file: LICENSE.rst
+  homepage: https://github.com/jic-dtool/dtool-ecs
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
